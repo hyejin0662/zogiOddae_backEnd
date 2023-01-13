@@ -1,6 +1,8 @@
-package com.zerobase.user.model;
+package com.zerobase.user.Form;
 
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
 public class SignInForm {

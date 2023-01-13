@@ -1,4 +1,4 @@
-package com.zerobase.user.model;
+package com.zerobase.user.Form;
 
 
 import lombok.AllArgsConstructor;

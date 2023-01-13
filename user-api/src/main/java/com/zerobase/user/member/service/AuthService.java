@@ -3,8 +3,6 @@ package com.zerobase.user.member.service;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import javax.validation.Valid;
-
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,13 +19,15 @@ import com.zerobase.user.member.dto.RefreshTokenRequestDto;
 import com.zerobase.user.member.dto.RefreshTokenResponseDto;
 import com.zerobase.user.member.dto.SignUpRequestDto;
 import com.zerobase.user.member.dto.SignUpRequestVerifyDto;
-import com.zerobase.user.member.entity.Member;
+import com.zerobase.user.member.entity.member.Member;
 import com.zerobase.user.member.repository.MemberRepository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class AuthService {
 
     private static final String REDIS_KEY_UUID = "MEMBER::VERIFIY::KEY::%s";
@@ -105,7 +105,7 @@ public class AuthService {
             .username(request.getUsername())            
             .password(passwordEncoder.encode(request.getPassword()))
             .status(MemberStatus.ACTIVE)
-            .role(request.getRole())            
+            .memberRole(request.getRole())
             .build();
         memberRepository.save(newMember);
 
@@ -125,14 +125,14 @@ public class AuthService {
             loginMember.getId(),
             loginMember.getUsername(),
             loginMember.getEmail(),
-            loginMember.getRole(),
+            loginMember.getMemberRole(),
             ACCESS_TOKEN_EXPIRE_TIME );
 
         String refreshToken = tokenProvider.generateToken(
             loginMember.getId(),
             loginMember.getUsername(),
             loginMember.getEmail(),
-            loginMember.getRole(),
+            loginMember.getMemberRole(),
             REFRESH_TOKEN_EXPIRE_TIME );
 
         String refreshTokenKey = this.getRefreshTokenKey(loginMember.getId());
@@ -177,14 +177,14 @@ public class AuthService {
             member.getId(),
             member.getUsername(),
             member.getEmail(),
-            member.getRole(),
+            member.getMemberRole(),
             ACCESS_TOKEN_EXPIRE_TIME );
 
         String newRefreshToken = tokenProvider.generateToken(
             member.getId(),
             member.getUsername(),
             member.getEmail(),
-            member.getRole(),
+            member.getMemberRole(),
             REFRESH_TOKEN_EXPIRE_TIME );    
 
         redisService.delRedis(refreshTokenKey);

@@ -1,7 +1,7 @@
 package com.zerobase.user.model;
 
 
-import com.zerobase.user.member.entity.Member;
+import com.zerobase.user.member.entity.member.Member;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

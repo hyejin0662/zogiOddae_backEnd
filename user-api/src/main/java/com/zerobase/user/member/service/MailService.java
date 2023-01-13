@@ -20,9 +20,11 @@ import com.zerobase.user.exception.CustomException;
 import com.zerobase.user.exception.ErrorCode;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class MailService {
     
     @Value("${spring.mail.username}")
@@ -33,7 +35,8 @@ public class MailService {
     private final JavaMailSender mailSender;
     private final ResourceLoader resourceLoader;
 
-    private void sendMail(String address, String subject, String message) {
+
+    public void sendMail(String address, String subject, String message) {
         MimeMessage mimeMessage = mailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
@@ -48,6 +51,7 @@ public class MailService {
         }
     }
 
+    @Transactional
     public void sendSignUpVerify(String email, String userName, String uuid) {
         ClassPathResource resource = (ClassPathResource) resourceLoader
                 .getResource("classpath:static/mailTemplate/SignUpMailVerify.html");

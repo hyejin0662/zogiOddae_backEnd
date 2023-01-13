@@ -12,7 +12,7 @@ import lombok.ToString;
 @ToString
 public class WebResponseData<T> {
 
-	private ErrorCode code;
+	private ErrorCode errorCode;
 	private T data;
 
 	public static <T> WebResponseData<T> ok(T data) {

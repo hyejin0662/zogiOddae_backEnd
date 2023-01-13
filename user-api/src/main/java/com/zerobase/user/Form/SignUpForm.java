@@ -1,7 +1,9 @@
-package com.zerobase.user.model;
+package com.zerobase.user.Form;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
+
 
 public class SignUpForm {
 
